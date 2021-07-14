@@ -10,9 +10,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.optimahorizonapps.triviaapp.controller.AppController;
+import com.optimahorizonapps.triviaapp.data.AnswerListAsyncResponse;
 import com.optimahorizonapps.triviaapp.data.Repository;
+import com.optimahorizonapps.triviaapp.model.Question;
 
 import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new Repository().getQuestions();
+        List<Question> questions = new Repository().getQuestions(questionArrayList ->
+                Log.d("MainA", "processFinished: " + questionArrayList.toString()));
 
     }
 }
