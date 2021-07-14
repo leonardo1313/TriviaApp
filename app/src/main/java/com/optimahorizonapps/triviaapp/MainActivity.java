@@ -10,12 +10,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.optimahorizonapps.triviaapp.controller.AppController;
+import com.optimahorizonapps.triviaapp.data.Repository;
 
 import org.json.JSONArray;
 
 public class MainActivity extends AppCompatActivity {
 
-    String url = "https://raw.githubusercontent.com/curiousily/simple-quiz/master/script/statements-data.json";
+
 
 
     @Override
@@ -23,14 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                response -> {
-                    Log.d("TAG", "onCreate: " + response);
+        new Repository().getQuestions();
 
-        }, error -> {
-
-        });
-
-        AppController.getInstance().addToRequestQueue(jsonArrayRequest);
     }
 }
