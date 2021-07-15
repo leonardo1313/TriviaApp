@@ -2,4 +2,7 @@
     <string name="app_name">TriviaApp</string>
     <string name="title">Trivia</string>
     <string name="question_number">Question 1/55</string>
+    <string name="falseButton">False</string>
+    <string name="trueButton">True</string>
+    <string name="nextButton">Next</string>
 </resources>
