@@ -5,6 +5,7 @@ import androidx.databinding.DataBindingUtil;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private int currentQuestionIndex = 0;
+    List<Question> questionList;
 
 
     @Override
@@ -33,8 +35,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        List<Question> questions = new Repository().getQuestions(questionArrayList ->
-                Log.d("MainA", "processFinished: " + questionArrayList.toString()));
+        questionList = new Repository().getQuestions(questionArrayList ->
+                        binding.questionTextView.setText(questionArrayList.get(currentQuestionIndex).getAnswer()));
 
+        binding.nextButton.setOnClickListener(v -> {
+            currentQuestionIndex = (currentQuestionIndex + 1) % questionList.size();
+        });
+
+        binding.trueButton.setOnClickListener(v -> {
+
+        });
+        binding.falseButton.setOnClickListener(v -> {
+
+        });
     }
 }
