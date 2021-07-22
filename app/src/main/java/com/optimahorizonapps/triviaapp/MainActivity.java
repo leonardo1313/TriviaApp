@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.os.Bundle;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.optimahorizonapps.triviaapp.data.Repository;
 import com.optimahorizonapps.triviaapp.databinding.ActivityMainBinding;
 import com.optimahorizonapps.triviaapp.model.Question;
@@ -39,15 +41,25 @@ public class MainActivity extends AppCompatActivity {
 
         binding.trueButton.setOnClickListener(v -> {
             checkAnswer(true);
+            currentQuestionIndex = (currentQuestionIndex + 1) % questionList.size();
+            updateQuestion();
         });
         binding.falseButton.setOnClickListener(v -> {
             checkAnswer(false);
+            currentQuestionIndex = (currentQuestionIndex + 1) % questionList.size();
+            updateQuestion();
         });
     }
 
     private void checkAnswer(boolean chosenAnswer) {
         boolean answer = questionList.get(currentQuestionIndex).isTrue();
-        
+        int snackMessageId = 0;
+        if (chosenAnswer == answer) {
+            snackMessageId = R.string.correct_answer;
+        } else {
+            snackMessageId = R.string.wrong_answer;
+        }
+        Snackbar.make(binding.questionCardView, snackMessageId, Snackbar.LENGTH_SHORT).show();
     }
 
     private void updateCounter(ArrayList<Question> questionArrayList) {
