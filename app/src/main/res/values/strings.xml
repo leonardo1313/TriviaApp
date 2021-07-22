@@ -6,4 +6,5 @@
     <string name="trueButton">True</string>
     <string name="nextButton">Next</string>
     <string name="question_text">This is where the question is gonna be displayed</string>
+    <string name="questionCount_text">Question: %d/%d</string>
 </resources>
