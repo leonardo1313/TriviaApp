@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.os.Bundle;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.optimahorizonapps.triviaapp.data.Repository;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             snackMessageId = R.string.correct_answer;
         } else {
             snackMessageId = R.string.wrong_answer;
+            shakeAnimation();
         }
         Snackbar.make(binding.questionCardView, snackMessageId, Snackbar.LENGTH_SHORT).show();
     }
@@ -71,5 +74,26 @@ public class MainActivity extends AppCompatActivity {
         String question = questionList.get(currentQuestionIndex).getAnswer();
         binding.questionTextView.setText(question);
         updateCounter((ArrayList<Question>) questionList);
+    }
+
+    private void shakeAnimation() {
+        Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake_animation);
+        binding.questionCardView.setAnimation(shake );
+        shake.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                binding.questionCardView.setCardBackgroundColor(getResources().getColor(R.color.red));
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                binding.questionCardView.setCardBackgroundColor(getResources().getColor(R.color.card_color));
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 }
