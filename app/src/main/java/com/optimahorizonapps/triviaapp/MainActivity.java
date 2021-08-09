@@ -1,9 +1,10 @@
-package com.optimahorizonapps.triviaapp;
+ package com.optimahorizonapps.triviaapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.os.Bundle;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
@@ -55,9 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkAnswer(boolean chosenAnswer) {
         boolean answer = questionList.get(currentQuestionIndex).isTrue();
-        int snackMessageId = 0;
+        int snackMessageId;
         if (chosenAnswer == answer) {
             snackMessageId = R.string.correct_answer;
+            fadeAnimation();
+
         } else {
             snackMessageId = R.string.wrong_answer;
             shakeAnimation();
@@ -83,6 +86,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationStart(Animation animation) {
                 binding.questionCardView.setCardBackgroundColor(getResources().getColor(R.color.red));
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                binding.questionCardView.setCardBackgroundColor(getResources().getColor(R.color.card_color));
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+    private void fadeAnimation() {
+        AlphaAnimation fade = new AlphaAnimation(1f, 0f);
+        fade.setDuration(500);
+        fade.setRepeatCount(1);
+        fade.setRepeatMode(Animation.REVERSE);
+
+        binding.questionCardView.setAnimation(fade);
+
+        fade.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                binding.questionCardView.setCardBackgroundColor(getResources().getColor(R.color.green));
             }
 
             @Override
