@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private int currentQuestionIndex = 0;
     List<Question> questionList;
+    int score = 0;
 
 
     @Override
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
             currentQuestionIndex = (currentQuestionIndex + 1) % questionList.size();
             updateQuestion();
         });
+
+        binding.scoreTextView.setText(R.string.score_text + score);
     }
 
     private void checkAnswer(boolean chosenAnswer) {
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         if (chosenAnswer == answer) {
             snackMessageId = R.string.correct_answer;
             fadeAnimation();
+            score++;
 
         } else {
             snackMessageId = R.string.wrong_answer;
