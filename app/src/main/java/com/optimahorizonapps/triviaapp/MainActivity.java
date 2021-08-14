@@ -3,6 +3,7 @@
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -23,7 +24,9 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private int currentQuestionIndex = 0;
     List<Question> questionList;
-    int score = 0;
+    private int scoreCounter = 0;
+    private Score score;
+
 
 
     @Override
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        score = new Score();
 
         questionList = new Repository().getQuestions(questionArrayList -> {
                     binding.questionTextView.setText(questionArrayList.get(currentQuestionIndex).getAnswer());
@@ -54,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
             updateQuestion();
         });
 
-        binding.scoreTextView.setText(R.string.score_text + score);
     }
 
     private void checkAnswer(boolean chosenAnswer) {
@@ -63,11 +66,12 @@ public class MainActivity extends AppCompatActivity {
         if (chosenAnswer == answer) {
             snackMessageId = R.string.correct_answer;
             fadeAnimation();
-            score++;
+            addScore();
 
         } else {
             snackMessageId = R.string.wrong_answer;
             shakeAnimation();
+            deductScore();
         }
         Snackbar.make(binding.questionCardView, snackMessageId, Snackbar.LENGTH_SHORT).show();
     }
@@ -128,4 +132,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private void addScore() {
+        scoreCounter++;
+        score.setScore(scoreCounter);
+        binding.scoreTextView.setText(getResources().getString(R.string.score_text) + " " + score.getScore());
+    }
+    private void deductScore() {
+        if(scoreCounter > 0) {
+            scoreCounter--;
+        }
+        score.setScore(scoreCounter);
+        binding.scoreTextView.setText(getResources().getString(R.string.score_text) + " " + score.getScore());
+    }
+
+
 }
