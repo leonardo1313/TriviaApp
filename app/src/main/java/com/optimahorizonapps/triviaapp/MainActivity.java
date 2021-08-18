@@ -13,9 +13,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.optimahorizonapps.triviaapp.data.Repository;
 import com.optimahorizonapps.triviaapp.databinding.ActivityMainBinding;
 import com.optimahorizonapps.triviaapp.model.Question;
+import com.optimahorizonapps.triviaapp.util.Prefs;
 
 
-
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     List<Question> questionList;
     private int scoreCounter = 0;
     private Score score;
+    private Prefs prefs;
 
 
 
@@ -35,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         score = new Score();
+        prefs = new Prefs(MainActivity.this);
+
+        binding.scoreTextView.setText(MessageFormat.format("{0} {1}",
+                getResources().getString(R.string.score_text), String.valueOf(score.getScore())));
+        binding.highScoreTextView.setText(MessageFormat.format("{0} {1}",
+                getResources().getString(R.string.high_score_textView), prefs.getHighestScore()));
 
         questionList = new Repository().getQuestions(questionArrayList -> {
                     binding.questionTextView.setText(questionArrayList.get(currentQuestionIndex).getAnswer());
@@ -85,6 +93,9 @@ public class MainActivity extends AppCompatActivity {
         String question = questionList.get(currentQuestionIndex).getAnswer();
         binding.questionTextView.setText(question);
         updateCounter((ArrayList<Question>) questionList);
+        prefs.saveHighestScore(scoreCounter);
+        binding.highScoreTextView.setText(MessageFormat.format("{0} {1}",
+                getResources().getString(R.string.high_score_textView), prefs.getHighestScore()));
     }
 
     private void shakeAnimation() {
@@ -135,15 +146,21 @@ public class MainActivity extends AppCompatActivity {
     private void addScore() {
         scoreCounter++;
         score.setScore(scoreCounter);
-        binding.scoreTextView.setText(getResources().getString(R.string.score_text) + " " + score.getScore());
+        binding.scoreTextView.setText(MessageFormat.format("{0} {1}",
+                getResources().getString(R.string.score_text), String.valueOf(score.getScore())));
     }
     private void deductScore() {
         if(scoreCounter > 0) {
             scoreCounter--;
         }
         score.setScore(scoreCounter);
-        binding.scoreTextView.setText(getResources().getString(R.string.score_text) + " " + score.getScore());
+        binding.scoreTextView.setText(MessageFormat.format("{0} {1}",
+                getResources().getString(R.string.score_text), String.valueOf(score.getScore())));
     }
 
-
+    @Override
+    protected void onPause() {
+        prefs.saveHighestScore(score.getScore());
+        super.onPause();
+    }
 }
